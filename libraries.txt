@@ -2,7 +2,6 @@ sudo apt install ffmpeg
 
 pip install praw
 pip install nltk
-pip install ffmpeg
 
 python3
 import nltk
