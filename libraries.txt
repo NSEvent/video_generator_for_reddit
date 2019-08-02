@@ -1,0 +1,11 @@
+sudo apt install ffmpeg
+
+pip install praw
+pip install nltk
+pip install ffmpeg
+
+python3
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
