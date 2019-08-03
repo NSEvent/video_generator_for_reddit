@@ -31,4 +31,7 @@ nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
 ```
 
+## Run
+`python3 main.py`
+
 
