@@ -99,10 +99,10 @@ class Post:
 		print('TITLE: ' + self.title)
 		print('AUTHOR: ' + self.author)
 		if self.is_video:
-			print('IS_VIDEO: True')
+			print('IS REDDIT HOSTED VIDEO POST: True')
 			print('ASPECT_RATIO: ' + str(self.aspect_ratio))
 		else:
-			print('IS_VIDEO: False')
+			print('IS REDDIT VIDEO POST: False')
 
 		print('URL: https://www.reddit.com' + self.post_url)
 		print('PPMP4: ' + self.filename_ppmp4)
@@ -119,6 +119,10 @@ class Post:
 
 
 	def save_video(self):
+		if not self.is_video:
+			print('Post URL is not a reddit hosted video')
+			return False	
+
 		dls_size = 0
 
 		ppdir = self.subreddit_name + '/pp'
@@ -133,8 +137,6 @@ class Post:
 
 		if not os.path.isfile(self.filename_ppmp4):
 			try:
-				# pprint.pprint(vars(sub))
-
 				print('\tDownloading ' + self.filename_ppmp4 + '...', end='')
 				sys.stdout.flush()
 
@@ -146,10 +148,6 @@ class Post:
 				print('success[' + str(round(dl_size / float(pow(2, 20)), 1)) + 'mb]')
 
 				dls_size += dl_size
-
-
-				# For normalizing to 720p HD 1280x720 videos
-				# command = ('ffmpeg -i ' + self.filename_ppmp4 +' -vf "scale=1280:720:force_original_aspect_ratio=decrease, pad=1280:720:(ow-iw)/2:(oh-ih)/2" ' + self.filename_normmp4)# .split()
 
 				# For normalizing to 1080p HD 1920x1080 videos
 				command = 'ffmpeg -i {} \
@@ -164,21 +162,24 @@ class Post:
 			except TypeError:
 				print('failed')
 
-
-
 		else:
 			print("File already exists")
+
+		return True
 
 	def save_comments(self):
 		commdir = self.subreddit_name + '/comm'
 		if not os.path.exists(commdir):
 			os.mkdir(commdir)
 
-		print('SAVING COMMENTS AT ' + self.filename_comm)
+		print('Attempting to save comments at ' + self.filename_comm)
 
 		if not os.path.isfile(self.filename_comm):
-			f = open(self.filename_comm, 'w+', encoding='utf-8')
+			print('\tDownloading ' + self.filename_comm + '...', end='')
+			sys.stdout.flush()
 
+
+			f = open(self.filename_comm, 'w+', encoding='utf-8')
 			tw = textwrap.TextWrapper(width=self.wrap_len, fix_sentence_endings=True, replace_whitespace=True)
 
 			f.write(self.author + ':\n')
@@ -186,6 +187,8 @@ class Post:
 			for (body, author) in self._comments:
 				f.write(author + ': \n' + tw.fill(body) + '\n\n')
 			f.close()
+
+			print('success')
 
 		else:
 			print('File already exists')
