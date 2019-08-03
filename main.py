@@ -3,7 +3,7 @@
 # Kevin Tang
 # Started 7/10/2019
 
-from scrape import scrape_video
+from production import scrape_video
 
 
 def main():

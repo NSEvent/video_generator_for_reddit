@@ -17,20 +17,12 @@ import re
 from tag_engine import Tag_engine
 from tag_engine import print_num_list
 
+
 ENCODING_OPTION_LOW = '-c:v libx264 -y -crf 30 -preset ultrafast'
 ENCODING_OPTION_MID = '-c:v libx264 -y -crf 26 -preset veryfast'
 ENCODING_OPTION_HIGH = '-c:v libx264 -y -crf 20 -preset veryfast'
 
 ENCODING = ENCODING_OPTION_LOW
-
-# Returns a subreddit obj given a reddit obj and a subreddit name
-# Modularized for future changes on how subreddit is chosen (maybe videos from multiple subreddits)
-def get_subreddit(reddit_obj, subreddit_name):
-	return reddit.subreddit(subreddit_name)
-
-
-def get_submissions(subreddit_obj, query, submission_limit = 5):
-	return subreddit.search(query, limit = submission_limit)
 
 
 class Post:
@@ -125,6 +117,7 @@ class Post:
 
 		dls_size = 0
 
+		# Create new directories to store videos
 		ppdir = self.subreddit_name + '/pp'
 		normdir = self.subreddit_name + '/norm'
 		if not os.path.exists(ppdir):
@@ -168,32 +161,36 @@ class Post:
 		return True
 
 	def save_comments(self):
+		# Create new directory to store comments
 		commdir = self.subreddit_name + '/comm'
 		if not os.path.exists(commdir):
 			os.mkdir(commdir)
 
 		print('Saving comments at ' + self.filename_comm)
 
+		# Write comments to the file in the format they will be overlayed
 		if not os.path.isfile(self.filename_comm):
 			f = open(self.filename_comm, 'w+', encoding='utf-8')
 			tw = textwrap.TextWrapper(width=self.wrap_len, fix_sentence_endings=True, replace_whitespace=True)
 
-
 			f.write(self.author + ':\n')
 
-			ftitle = tw.fill(self.title)
-
-			# Encode and decode to another charset to remove emojis
+			# Sanitize text
+			ftitle = re.sub(r'https\S+', '', self.title)
 			ftitle = ftitle.encode('latin-1', 'ignore').decode('latin-1')	
-			# Remove all links
-			ftitle = re.sub(r'https\S+', '', ftitle)
+			ftitle = tw.fill(ftitle)
 
 			f.write(ftitle + '\n\n')
 			for (body, author) in self._comments:
-				# Remove emojis
-				fbody = tw.fill(body)
+				# Remove links
+				fbody = re.sub(r'https\S+', '', body)
+
+				# Encode and decode to another charset to remove emojis
 				fbody = fbody.encode('latin-1', 'ignore').decode('latin-1')	
-				fbody = re.sub(r'https\S+', '', fbody)
+
+				# Wrap lines
+				fbody = tw.fill(fbody)
+
 				f.write(author + ': \n' + fbody + '\n\n')
 			f.close()
 
@@ -201,6 +198,7 @@ class Post:
 			print('File already exists')
 
 	def overlay_comments(self):
+		# Create new directory to store videos
 		ccdir = self.subreddit_name + '/cc'
 		if not os.path.exists(ccdir):
 			os.mkdir(ccdir)
@@ -208,7 +206,7 @@ class Post:
 		print('Overlaying comments and saving at ' + self.filename_ccmp4)
 
 		if not os.path.isfile(self.filename_ccmp4):
-			# Resize to 1080p
+			# Overlay upward scrolling comments
 			command = 'ffmpeg -i {} \
 					-filter_complex "[0]split[txt][orig]; \
 					[txt]drawtext=fontfile=fonts/verdana.ttf:fontsize=28:fontcolor=white:x=5:y=h-60*t: \
