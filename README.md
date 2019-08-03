@@ -1,5 +1,5 @@
 # reddit_video_generator_demo
-A tool that creates videos out of reddit-hosted (https://v.redd.it) video posts, given a url to the post.
+A tool that creates videos out of reddit-hosted video posts, given a url to the post.
 
 ## Examples of generated videos
 1. [ORIGINAL POST](https://www.reddit.com/r/aww/comments/c5xurx/my_dad_sent_me_this_and_i_have_a_new_favorite/) |  [VIDEO](https://giphy.com/gifs/Q7joL1dJHT6kARdV5T)
@@ -19,12 +19,12 @@ The video dimensions are normalized to 1920x1080 to be easily combined to create
 
 Top tags for each video are drawn from top comments. [nltk](http://www.nltk.org/) is used to select 1-word, 2-word-phrase, and 3-word-phrase tags to represent a post. This feature works best if the post has a large number of comments.
 
-Tested with Python 3.7.0
+Tested with Python 3.7.0 in Linux environment
 
 # To try yourself
 1. Create a [new reddit app](https://www.reddit.com/prefs/apps). Choose "script" as the type of app. Use `http://localhost:8080` for the "redirect uri".
 2. Enter your reddit app information in test.py.
-3. Add a call to scrape_video(your_url_goes_here) in main.py.
+3. Add a call to `scrape_video(your_url_goes_here)` in main.py.
 4. Install the required dependencies listed below.
 
 ## Install required dependencies
@@ -46,5 +46,6 @@ nltk.download('averaged_perceptron_tagger')
 ```bash
 python3 main.py
 ```
+Finished videos are stored in `<subreddit_name>/gif/`
 
 
