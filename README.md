@@ -1,4 +1,4 @@
-# reddit_video_generator_demo
+# video_generator_for_reddit
 A tool that creates videos out of reddit-hosted video posts, given a url to the post.
 
 ## Examples of generated videos
@@ -48,4 +48,5 @@ python3 main.py
 ```
 Finished videos are stored in `<subreddit_name>/gif/`
 
-
+# Author
+Kevin Tang
