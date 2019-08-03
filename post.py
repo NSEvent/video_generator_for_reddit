@@ -64,7 +64,7 @@ class Post:
 
 			# in char widths
 			estimated_chars_to_fill_width = 135#150
-			precomment_width = 3#1
+			precomment_width = 6#1
 			self.wrap_len = int((self.margin_width / self.normalized_height) * estimated_chars_to_fill_width) - precomment_width
 			# Takes care of videos that have no margins
 			if (self.aspect_ratio >= 1.5):

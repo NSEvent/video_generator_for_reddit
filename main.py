@@ -8,10 +8,9 @@ from scrape import scrape_video
 
 def main():
 
-	# WORKS
 	scrape_video('https://www.reddit.com/r/aww/comments/c5xurx/my_dad_sent_me_this_and_i_have_a_new_favorite/')
-	# scrape_video('https://www.reddit.com/r/aww/comments/b0fi8e/head_scritchesinstant_golden_smiles/')
-	# scrape_video('https://www.reddit.com/r/aww/comments/9r9gfb/kids_sing_happy_birthday_with_sign_language_for/')
+	# scrape_video('https://www.reddit.com/r/aww/comments/clheav/how_im_greeted_each_time_i_come_home_from_work/')
+	# scrape_video('https://www.reddit.com/r/aww/comments/clk47p/ups_man_took_a_moment_yesterday_for_himself_it/')
 
 
 if __name__ == "__main__":
