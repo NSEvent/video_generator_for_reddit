@@ -5,7 +5,7 @@
 import praw
 from post import Post
 
-def test(post_url):
+def scrape_video(post_url):
 	reddit = praw.Reddit(client_id='', \
 			     client_secret='', \
 			     user_agent='', \
@@ -19,6 +19,7 @@ def test(post_url):
 
 	# Save top videos and normalize to 1920x1080
 	if (p.save_video()):
+		# Process video
 
 		# Save comments to txt file
 		p.save_comments()
