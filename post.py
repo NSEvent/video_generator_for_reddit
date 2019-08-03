@@ -141,7 +141,7 @@ class Post:
 				sys.stdout.flush()
 
 				# Sleep to avoid being blocked from reddit
-				time.sleep(4)
+				time.sleep(1)
 				meta = urllib.request.urlretrieve(self.fallback_url, self.filename_ppmp4)[1]
 				dl_size = float(meta['Content-Length'])
 
@@ -172,13 +172,9 @@ class Post:
 		if not os.path.exists(commdir):
 			os.mkdir(commdir)
 
-		print('Attempting to save comments at ' + self.filename_comm)
+		print('Saving comments at ' + self.filename_comm)
 
 		if not os.path.isfile(self.filename_comm):
-			print('\tDownloading ' + self.filename_comm + '...', end='')
-			sys.stdout.flush()
-
-
 			f = open(self.filename_comm, 'w+', encoding='utf-8')
 			tw = textwrap.TextWrapper(width=self.wrap_len, fix_sentence_endings=True, replace_whitespace=True)
 
@@ -187,8 +183,6 @@ class Post:
 			for (body, author) in self._comments:
 				f.write(author + ': \n' + tw.fill(body) + '\n\n')
 			f.close()
-
-			print('success')
 
 		else:
 			print('File already exists')
@@ -200,10 +194,10 @@ class Post:
 		if not os.path.exists(ccdir):
 			os.mkdir(ccdir)
 
-		print('SAVING VIDEO WITH COMMENTS AT ' + self.filename_ccmp4)
+		print('Overlaying comments and saving at ' + self.filename_ccmp4)
 
 		if not os.path.isfile(self.filename_ccmp4):
-			# Command adapted to 1080p
+			# Resize to 1080p
 			command = 'ffmpeg -i {} \
 					-filter_complex "[0]split[txt][orig]; \
 					[txt]drawtext=fontfile=fonts/verdana.ttf:fontsize=28:fontcolor=white:x=5:y=h-60*t: \
@@ -225,7 +219,7 @@ class Post:
 		if not os.path.exists(gifdir):
 			os.mkdir(gifdir)
 
-		print('SAVING VIDEO WITH GIF AT ' + self.filename_gifmp4)
+		print('Overlaying gif and saving at ' + self.filename_gifmp4)
 
 		if not os.path.isfile(self.filename_gifmp4):
 			filename_gif = 'giphy.gif'
