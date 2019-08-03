@@ -7,13 +7,13 @@ import os
 import sys
 import time
 import praw
-import datetime as dt
 import urllib
 import urllib.request
 import pprint
 import textwrap
 import subprocess
 import shlex
+import re
 from tag_engine import Tag_engine
 from tag_engine import print_num_list
 
@@ -178,16 +178,27 @@ class Post:
 			f = open(self.filename_comm, 'w+', encoding='utf-8')
 			tw = textwrap.TextWrapper(width=self.wrap_len, fix_sentence_endings=True, replace_whitespace=True)
 
+
 			f.write(self.author + ':\n')
-			f.write(tw.fill(self.title) + '\n\n')
+
+			ftitle = tw.fill(self.title)
+
+			# Encode and decode to another charset to remove emojis
+			ftitle = ftitle.encode('latin-1', 'ignore').decode('latin-1')	
+			# Remove all links
+			ftitle = re.sub(r'https\S+', '', ftitle)
+
+			f.write(ftitle + '\n\n')
 			for (body, author) in self._comments:
-				f.write(author + ': \n' + tw.fill(body) + '\n\n')
+				# Remove emojis
+				fbody = tw.fill(body)
+				fbody = fbody.encode('latin-1', 'ignore').decode('latin-1')	
+				fbody = re.sub(r'https\S+', '', fbody)
+				f.write(author + ': \n' + fbody + '\n\n')
 			f.close()
 
 		else:
 			print('File already exists')
-
-
 
 	def overlay_comments(self):
 		ccdir = self.subreddit_name + '/cc'
