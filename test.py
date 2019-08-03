@@ -14,8 +14,17 @@ def test(post_url):
 			     password='')
 	sub = praw.models.Submission(reddit, url = post_url)
 
+	# Intitialize post object, scrape comments, and generate top tags
 	p = Post(sub)
+
+	# Save top videos and normalize to 1920x1080
 	p.save_video()
+
+	# Save comments to txt file
 	p.save_comments()
+
+	# Overlay scrolling comments on left margin
 	p.overlay_comments()
+
+	# Overlay gif on left corner
 	p.overlay_gif()
